@@ -19,20 +19,20 @@ def my_field_mapper(line):
     return map
 
 def main():
-    processor = Processor('data/product.product.raw.csv', delimiter=',')
+    processor = Processor('data/product.template.raw.csv', delimiter=',', conf_file="config/localhost.conf")
     product_mapping = {
         'id': mapper.val('id'),
         'image_1920': mapper.binary('image_1920', '/home/odoo/Desktop/odoo/partner/image-upload/image/'),
     }
-    processor.process(product_mapping, 'exports/product.product.csv', {})
-    # image_mapping = {
-    #     'id': mapper.m2m_id_list('import_product_image', 'extra'),
-    #     'name': mapper.m2m_value_list('extra'),
-    #     'image_1920': my_field_mapper,
-    #     'product_tmpl_id/id': mapper.val('id'),
-    # }
-    # processor.process(image_mapping, 'exports/product.image.csv', {}, m2m=True)
-    processor.write_to_file("exports/product_product.sh", python_exe='', path='')
+    processor.process(product_mapping, 'exports/product.template.csv', {})
+    image_mapping = {
+        'id': mapper.m2m_id_list('import_product_image', 'extra'),
+        'name': mapper.m2m_value_list('extra'),
+        'image_1920': my_field_mapper,
+        'product_tmpl_id/id': mapper.val('id'),
+    }
+    processor.process(image_mapping, 'exports/product.image.csv', {}, m2m=True)
+    processor.write_to_file("exports/product_template.sh", python_exe='', path='')
 
 if __name__ == "__main__":
     main()
